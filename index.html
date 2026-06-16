@@ -389,51 +389,65 @@
   .read .rlabel::after { content: ""; flex: 1; height: 1px; background: var(--cream-line); }
   
   .idol { font-family: "Fraunces", serif; font-size: clamp(18px, 2.5vw, 22px); line-height: 1.4; font-weight: 400; color: var(--cream); }
-  .idol b { color: var(--orange); font-weight: 500; }
-
-  /* Loop horizontal (desktop) / vertical (mobile) progress display */
+  .idol b { color: var(--orange); font-weight: 500; }  /* Loop horizontal (desktop) / vertical (mobile) progress display */
   .loop {
     margin-top: 24px;
     display: flex;
     align-items: stretch;
-    gap: 0;
+    gap: 12px;
     flex-wrap: nowrap;
-    overflow: visible;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  .beat { flex: 1 1 0; min-width: 100px; padding: 0 10px; position: relative; }
-  .beat:not(:last-child)::after {
-    content: "\2192"; position: absolute; right: -5px; top: 2px; color: var(--cream-soft); font-size: 12px;
+  .loop::-webkit-scrollbar {
+    display: none;
+  }
+  .beat {
+    flex: 1 1 0;
+    min-width: 130px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
   .beat .bk { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-soft); display: block; margin-bottom: 6px; }
   .beat .bv { font-size: 12.5px; line-height: 1.35; color: var(--cream); }
-  .beat.idol-beat { background: rgba(243,101,28,0.12); border-radius: 2px; padding: 10px 10px; }
+  .beat.idol-beat { background: rgba(243,101,28,0.12); border-radius: 4px; padding: 12px 14px; }
   .beat.idol-beat .bk { color: var(--orange); }
+  
+  .loop-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream-soft);
+    font-size: 15px;
+    flex-shrink: 0;
+    user-select: none;
+    width: 24px;
+    align-self: center;
+  }
 
   /* Mobile vertical loop configuration */
   @media(max-width: 768px) {
     .loop {
       flex-direction: column;
-      gap: 16px;
+      align-items: stretch;
+      gap: 12px;
+      overflow-x: visible;
     }
     .beat {
-      padding: 12px 16px;
-      border-left: 2px solid var(--cream-line);
-      min-height: auto;
+      flex: none;
+      min-width: 100%;
     }
-    .beat:not(:last-child)::after {
-      content: "\2193"; /* Down arrow icon */
-      position: absolute;
-      left: -7px;
-      top: auto;
-      bottom: -16px;
-      color: var(--cream-soft);
-      font-size: 12px;
-      z-index: 10;
-    }
-    .beat.idol-beat {
-      border-left: 2px solid var(--orange);
-      background: rgba(243, 101, 28, 0.12);
-      padding: 12px 16px;
+    .loop-arrow {
+      width: auto;
+      height: auto;
+      transform: rotate(90deg);
+      align-self: flex-start;
+      margin-left: 14px;
+      padding: 2px 0;
     }
   }
 
@@ -1253,7 +1267,7 @@ function renderActsAccordion() {
       <div class="beat${idx === 2 ? ' idol-beat' : ''}">
         <span class="bk">${LOOP_KEYS[idx]}</span>
         <span class="bv">${v}</span>
-      </div>`).join("");
+      </div>`).join('<span class="loop-arrow" aria-hidden="true">&rarr;</span>');
       
     return `
       <article class="entry">
