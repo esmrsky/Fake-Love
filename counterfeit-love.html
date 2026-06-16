@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0E0D0B;
-    --cream: #F2EBDC;
-    --cream-2: #E8DEC9;
+    --ink: #1C1B19;
+    --cream: #F9F6F0;
+    --cream-2: #EFECE6;
     --orange: #F3651C;
-    --muted: #6B655A;
-    --line: rgba(14,13,11,0.12);
-    --line-strong: rgba(14,13,11,0.24);
-    --cream-soft: rgba(242,235,220,0.62);
-    --cream-line: rgba(242,235,220,0.14);
-    --accent-blue: #2E5B88;
-    --card-shadow: 0 4px 20px rgba(14,13,11,0.04);
+    --muted: #4E483C; /* WCAG AA Contrast Compliant (>4.5:1) */
+    --line: rgba(28, 27, 25, 0.08);
+    --line-strong: rgba(28, 27, 25, 0.18);
+    --cream-soft: rgba(249, 246, 240, 0.65);
+    --cream-line: rgba(249, 246, 240, 0.15);
+    --card-shadow: 0 4px 16px rgba(28, 27, 25, 0.03);
+    --focus-ring: 2px solid var(--orange);
   }
   
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,7 +62,7 @@
     max-width: 68ch;
     font-size: clamp(17px, 2.3vw, 20px);
     line-height: 1.6;
-    color: #2a2722;
+    color: var(--ink);
   }
   .thesis b { font-weight: 600; }
   .thesis i { font-style: italic; color: var(--orange); }
@@ -110,7 +110,8 @@
     border-bottom: 1px solid var(--line);
     padding: 16px 0;
     backdrop-filter: blur(8px);
-    background: rgba(242, 235, 220, 0.94);
+    background: rgba(249, 246, 240, 0.94);
+    transition: opacity 0.25s, visibility 0.25s;
   }
   .control-wrap {
     display: flex;
@@ -133,7 +134,7 @@
   }
   .btn-group {
     display: flex;
-    background: rgba(14, 13, 11, 0.05);
+    background: rgba(28, 27, 25, 0.05);
     padding: 3px;
     border-radius: 4px;
     border: 1px solid var(--line);
@@ -158,7 +159,7 @@
     color: var(--cream);
   }
   .toggle-btn:focus-visible {
-    outline: 2px solid var(--orange);
+    outline: var(--focus-ring);
   }
 
   /* ---------- PANELS MANAGEMENT ---------- */
@@ -181,121 +182,131 @@
     font-size: 15.5px;
   }
 
-  /* FAMILY I: CARDS GRID */
+  /* FAMILY I: EXPANDABLE CARDS GRID */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     padding: 16px 0 48px;
   }
-  .card-container {
-    perspective: 1000px;
-    height: 250px;
-    cursor: pointer;
-  }
-  .card {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-  }
-  .card-container:hover .card {
-    transform: translateY(-4px);
-  }
-  .card-container.flipped .card {
-    transform: rotateY(180deg);
-  }
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 4px;
+  .feeling-card {
+    background: var(--cream-2);
     border: 1px solid var(--line-strong);
     padding: 24px;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-  }
-  .card-front {
-    background: var(--cream-2);
     box-shadow: var(--card-shadow);
+    transition: transform 0.25s, box-shadow 0.25s;
+    height: auto; /* Eliminates the 250px overflow bug */
   }
-  .card-front .c-meta {
+  .feeling-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(28, 27, 25, 0.06);
+  }
+  .feeling-card .c-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 16px;
   }
-  .card-front .c-driver {
+  .feeling-card .c-driver {
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--orange);
     background: rgba(243, 101, 28, 0.08);
     padding: 3px 8px;
     border-radius: 2px;
   }
-  .card-front h3 {
+  .feeling-card h3 {
     font-family: "Fraunces", serif;
     font-size: 24px;
     font-weight: 500;
-    margin-top: 16px;
-    line-height: 1.1;
+    line-height: 1.15;
   }
-  .card-front .c-sub {
+  .feeling-card .c-sub {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     color: var(--muted);
     margin-top: 4px;
   }
-  .card-front .c-hint {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10.5px;
-    color: var(--muted);
-    text-align: right;
-    margin-top: auto;
+  .feeling-card .c-sensation {
+    margin-top: 16px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink);
   }
-  .card-back {
-    background: var(--ink);
-    color: var(--cream);
-    transform: rotateY(180deg);
-    border-color: var(--ink);
+  
+  /* CSS Grid Expansion pattern for card reveal */
+  .feeling-card .c-reveal-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .card-back h4 {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--orange);
-    border-bottom: 1px solid var(--cream-line);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+  .feeling-card .c-reveal-inner {
+    min-height: 0;
+    overflow: hidden;
   }
-  .card-back .c-section {
-    margin-bottom: 12px;
+  .feeling-card.expanded .c-reveal-panel {
+    grid-template-rows: 1fr;
   }
-  .card-back .c-label {
+  
+  .feeling-card .c-reality-block {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .feeling-card .c-label {
     font-family: "JetBrains Mono", monospace;
     font-size: 9.5px;
-    color: var(--cream-soft);
+    color: var(--orange);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     display: block;
+    margin-bottom: 6px;
   }
-  .card-back .c-text {
-    font-size: 13.5px;
+  .feeling-card .c-text {
+    font-size: 14px;
     line-height: 1.45;
   }
-  .card-back .c-lit {
+  .feeling-card .c-lit {
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;
-    color: var(--orange);
-    margin-top: auto;
+    color: var(--muted);
+    margin-top: 14px;
+    display: block;
+  }
+  .feeling-card .c-toggle-btn {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    width: 100%;
+    text-align: center;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+  }
+  .feeling-card .c-toggle-btn:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .feeling-card .c-toggle-btn:focus-visible {
+    outline: var(--focus-ring);
+  }
+  .feeling-card.expanded .c-toggle-btn {
+    background: var(--muted);
+    color: var(--cream);
+    border-color: var(--muted);
   }
 
-  /* FAMILY II: ACCORDIONS */
+  /* FAMILY II: CSS GRID ACCORDIONS */
   .accordion-wrap {
     border-top: 1px solid var(--line);
     margin-bottom: 64px;
@@ -306,7 +317,7 @@
     background: transparent; border: 0; cursor: pointer; text-align: left;
     padding: 28px 0; color: var(--ink);
   }
-  .entry-head:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+  .entry-head:focus-visible { outline: var(--focus-ring); outline-offset: 4px; }
   .numeral {
     font-family: "Fraunces", serif; font-weight: 400; font-size: 22px;
     color: var(--muted); min-width: 38px; font-feature-settings: "lnum";
@@ -327,11 +338,24 @@
   }
   .entry-head[aria-expanded="true"] .chev { transform: rotate(180deg); color: var(--ink); }
 
-  .panel { overflow: hidden; height: 0; transition: height 0.34s cubic-bezier(0.4, 0, 0.2, 1); }
-  .panel-inner { padding: 4px 0 36px; padding-left: 58px; }
-  @media(max-width: 620px) { .panel-inner { padding-left: 0; } }
+  /* Fully CSS-native Accordion Transition using Grid */
+  .panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .panel.open {
+    grid-template-rows: 1fr;
+  }
+  .panel-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding-left: 58px;
+  }
+  @media(max-width: 768px) { .panel-inner { padding-left: 0; } }
 
   /* Grounded details */
+  .ground { padding: 4px 0 32px; }
   .ground .glabel {
     font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.18em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
@@ -344,9 +368,9 @@
     font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.08em;
     text-transform: uppercase; color: var(--muted); padding-top: 3px;
   }
-  .row dd { font-size: 15px; line-height: 1.5; }
+  .row dd { font-size: 15px; line-height: 1.5; color: var(--ink); }
   .row.tell dd { font-weight: 600; }
-  .row.echo dd { color: #524e46; font-style: italic; }
+  .row.echo dd { color: var(--muted); font-style: italic; }
   @media(max-width: 540px) {
     .row { grid-template-columns: 1fr; gap: 4px; }
     .row dt { padding-top: 0; }
@@ -354,8 +378,9 @@
 
   /* Interactive read block */
   .read {
-    margin-top: 26px; background: var(--ink); color: var(--cream);
+    margin-top: 6px; background: var(--ink); color: var(--cream);
     border-radius: 2px; padding: 28px 28px 32px;
+    margin-bottom: 36px;
   }
   .read .rlabel {
     font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.18em;
@@ -366,21 +391,14 @@
   .idol { font-family: "Fraunces", serif; font-size: clamp(18px, 2.5vw, 22px); line-height: 1.4; font-weight: 400; color: var(--cream); }
   .idol b { color: var(--orange); font-weight: 500; }
 
-  /* Loop horizontal display */
+  /* Loop horizontal (desktop) / vertical (mobile) progress display */
   .loop {
     margin-top: 24px;
     display: flex;
     align-items: stretch;
     gap: 0;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 12px 0;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .loop::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
   }
   .beat { flex: 1 1 0; min-width: 100px; padding: 0 10px; position: relative; }
   .beat:not(:last-child)::after {
@@ -388,9 +406,36 @@
   }
   .beat .bk { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-soft); display: block; margin-bottom: 6px; }
   .beat .bv { font-size: 12.5px; line-height: 1.35; color: var(--cream); }
-  .beat.idol-beat { background: rgba(243,101,28,0.12); border-radius: 2px; padding: 10px 10px; margin: -10px 0; }
+  .beat.idol-beat { background: rgba(243,101,28,0.12); border-radius: 2px; padding: 10px 10px; }
   .beat.idol-beat .bk { color: var(--orange); }
-  @media(max-width: 620px) { .loop { gap: 2px; } .beat { min-width: 112px; } }
+
+  /* Mobile vertical loop configuration */
+  @media(max-width: 768px) {
+    .loop {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .beat {
+      padding: 12px 16px;
+      border-left: 2px solid var(--cream-line);
+      min-height: auto;
+    }
+    .beat:not(:last-child)::after {
+      content: "\2193"; /* Down arrow icon */
+      position: absolute;
+      left: -7px;
+      top: auto;
+      bottom: -16px;
+      color: var(--cream-soft);
+      font-size: 12px;
+      z-index: 10;
+    }
+    .beat.idol-beat {
+      border-left: 2px solid var(--orange);
+      background: rgba(243,101,28,0.12);
+      padding: 12px 16px;
+    }
+  }
 
   /* True love turn */
   .turn { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--cream-line); }
@@ -418,6 +463,8 @@
     gap: 12px;
   }
   .step-node {
+    background: transparent;
+    border: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -425,6 +472,13 @@
     min-width: 80px;
     cursor: pointer;
     text-align: center;
+    padding: 8px 0;
+    font-family: inherit;
+    transition: transform 0.2s;
+  }
+  .step-node:focus-visible {
+    outline: var(--focus-ring);
+    border-radius: 4px;
   }
   .step-circle {
     width: 32px;
@@ -469,6 +523,8 @@
     padding: 32px;
     border-radius: 4px;
     margin-bottom: 36px;
+    min-height: 120px;
+    transition: opacity 0.25s;
   }
   .step-display-card h3 {
     font-family: "Fraunces", serif;
@@ -485,7 +541,7 @@
 
   .step-comparison-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 16px;
   }
   .comp-cell {
@@ -493,6 +549,7 @@
     border: 1px solid var(--line-strong);
     padding: 20px;
     border-radius: 2px;
+    box-shadow: var(--card-shadow);
   }
   .comp-cell h4 {
     font-family: "Fraunces", serif;
@@ -518,7 +575,13 @@
   /* ---------- VIEW 3: THE MATRIX ---------- */
   .matrix-view {
     padding: 40px 0 64px;
+  }
+  
+  /* Matrix responsive configuration (desktop table vs mobile cards) */
+  .matrix-table-wrap {
     overflow-x: auto;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
   }
   .matrix-table {
     width: 100%;
@@ -527,6 +590,7 @@
     line-height: 1.4;
     text-align: left;
     min-width: 800px;
+    background: var(--cream-2);
   }
   .matrix-table th, .matrix-table td {
     padding: 16px 12px;
@@ -539,10 +603,13 @@
     text-transform: uppercase;
     color: var(--muted);
     letter-spacing: 0.1em;
-    background: rgba(14, 13, 11, 0.03);
+    background: rgba(28, 27, 25, 0.04);
+  }
+  .matrix-table tr:last-child td {
+    border-bottom: 0;
   }
   .matrix-table tr:hover {
-    background: rgba(14, 13, 11, 0.01);
+    background: rgba(28, 27, 25, 0.02);
   }
   .matrix-table .m-name {
     font-family: "Fraunces", serif;
@@ -555,6 +622,50 @@
     color: var(--orange);
     text-transform: uppercase;
     display: block;
+  }
+
+  .matrix-cards {
+    display: none;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .matrix-card {
+    background: var(--cream-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+  }
+  .matrix-card h3 {
+    font-family: "Fraunces", serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .matrix-card-row {
+    margin-top: 12px;
+  }
+  .matrix-card-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .matrix-card-val {
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+
+  @media(max-width: 768px) {
+    .matrix-table-wrap { display: none; }
+    .matrix-cards { display: grid; }
   }
 
   /* ---------- THE THREE DISCRIMINATORS ---------- */
@@ -585,7 +696,7 @@
   .disc-text p {
     font-size: 16.5px;
     line-height: 1.6;
-    color: #2a2722;
+    color: var(--ink);
     margin-bottom: 16px;
   }
   .disc-highlight {
@@ -607,6 +718,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: 0 8px 32px rgba(28, 27, 25, 0.15);
   }
   .diagnostic-panel h3 {
     font-family: "Fraunces", serif;
@@ -635,24 +747,29 @@
   .diag-btn {
     font-family: "Instrument Sans", sans-serif;
     font-size: 12.5px;
-    padding: 8px 12px;
-    background: rgba(242, 235, 220, 0.06);
+    padding: 10px 12px;
+    background: rgba(249, 246, 240, 0.06);
     border: 1px solid var(--cream-line);
     color: var(--cream-soft);
     cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
   }
   .diag-btn:hover {
-    background: rgba(242, 235, 220, 0.12);
+    background: rgba(249, 246, 240, 0.12);
     color: var(--cream);
+    border-color: var(--cream-soft);
   }
   .diag-btn.selected {
-    background: var(--cream);
-    color: var(--ink);
-    border-color: var(--cream);
+    background: var(--orange);
+    color: var(--cream);
+    border-color: var(--orange);
     font-weight: 500;
+    box-shadow: 0 2px 8px rgba(243, 101, 28, 0.25);
+  }
+  .diag-btn:focus-visible {
+    outline: var(--focus-ring);
   }
   
   .diag-result {
@@ -674,7 +791,7 @@
     display: block;
   }
   .diag-res-text {
-    font-size: 14px;
+    font-size: 14.5px;
     line-height: 1.45;
     color: var(--cream);
   }
@@ -717,7 +834,7 @@
     </div>
   </header>
 
-  <!-- VIEW CONTROLSSTICKY BAR -->
+  <!-- VIEW CONTROLS / STICKY BAR -->
   <div class="control-section">
     <div class="wrap control-wrap">
       <div class="control-group">
@@ -774,26 +891,26 @@
         </div>
         
         <nav class="stepper-nav" aria-label="Loop cycle steps">
-          <div class="step-node active" data-step="0">
+          <button class="step-node active" data-step="0" aria-label="Step 1: Wound">
             <span class="step-circle">1</span>
             <span class="step-name">Wound</span>
-          </div>
-          <div class="step-node" data-step="1">
+          </button>
+          <button class="step-node" data-step="1" aria-label="Step 2: Offer">
             <span class="step-circle">2</span>
             <span class="step-name">Offer</span>
-          </div>
-          <div class="step-node" data-step="2">
+          </button>
+          <button class="step-node" data-step="2" aria-label="Step 3: Idol">
             <span class="step-circle">3</span>
             <span class="step-name">Idol</span>
-          </div>
-          <div class="step-node" data-step="3">
+          </button>
+          <button class="step-node" data-step="3" aria-label="Step 4: Altar">
             <span class="step-circle">4</span>
             <span class="step-name">Altar</span>
-          </div>
-          <div class="step-node" data-step="4">
+          </button>
+          <button class="step-node" data-step="4" aria-label="Step 5: Structure">
             <span class="step-circle">5</span>
             <span class="step-name">Structure</span>
-          </div>
+          </button>
         </nav>
         
         <div class="step-display-card" id="step-info-card">
@@ -814,20 +931,28 @@
           <p>A comprehensive side-by-side catalog comparing the core mechanisms, tells, and alignment resolutions for all 12 counterfeits.</p>
         </div>
         
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th style="width: 20%;">Type</th>
-              <th style="width: 15%;">Family</th>
-              <th style="width: 25%;">Core Driver / Need</th>
-              <th style="width: 20%;">The Tell</th>
-              <th style="width: 20%;">True Turn</th>
-            </tr>
-          </thead>
-          <tbody id="matrix-tbody">
-            <!-- JS dynamic -->
-          </tbody>
-        </table>
+        <!-- Desktop Table view -->
+        <div class="matrix-table-wrap">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Type</th>
+                <th style="width: 15%;">Family</th>
+                <th style="width: 25%;">Core Driver / Need</th>
+                <th style="width: 20%;">The Tell</th>
+                <th style="width: 20%;">True Turn</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody">
+              <!-- JS dynamic -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Cards view -->
+        <div class="matrix-cards" id="matrix-cards-root">
+          <!-- JS dynamic -->
+        </div>
       </div>
     </section>
 
@@ -1065,47 +1190,59 @@ const STEP_DEFS = [
 const feelingsRoot = document.getElementById("feelings-root");
 const actsRoot = document.getElementById("acts-root");
 const matrixTbody = document.getElementById("matrix-tbody");
+const matrixCardsRoot = document.getElementById("matrix-cards-root");
 const stepInfoCard = document.getElementById("step-info-card");
 const stepCompRoot = document.getElementById("step-comp-root");
 
 // 1. Render Family I Feelings Cards
 function renderFeelings() {
-  feelingsRoot.innerHTML = DATA_FEELINGS.map(f => `
-    <div class="card-container">
-      <div class="card">
-        <div class="card-front">
-          <div class="c-meta">
-            <span class="eyebrow">Feelings</span>
-            <span class="c-driver">${f.driver}</span>
-          </div>
-          <div>
-            <h3>${f.name}</h3>
-            <div class="c-sub">${f.sub}</div>
-          </div>
-          <div class="c-hint">Tap to expose reality &rarr;</div>
-        </div>
-        <div class="card-back">
-          <h4>The Anatomy of ${f.name}</h4>
-          <div class="c-section">
-            <span class="c-label">The Sensation</span>
-            <p class="c-text">${f.sensation}</p>
-          </div>
-          <div class="c-section">
+  feelingsRoot.innerHTML = DATA_FEELINGS.map((f, i) => `
+    <div class="feeling-card" id="feeling-card-${i}">
+      <div class="c-meta">
+        <span class="eyebrow">Feelings</span>
+        <span class="c-driver">${f.driver}</span>
+      </div>
+      <div>
+        <h3>${f.name}</h3>
+        <div class="c-sub">${f.sub}</div>
+        <p class="c-sensation">${f.sensation}</p>
+      </div>
+      
+      <div class="c-reveal-panel" aria-hidden="true" id="feeling-reveal-${i}">
+        <div class="c-reveal-inner">
+          <div class="c-reality-block">
             <span class="c-label">The Clinical Reality</span>
             <p class="c-text"><b>${f.reality}</b></p>
           </div>
-          <div class="c-lit">${f.lit}</div>
+          <span class="c-lit">${f.lit}</span>
         </div>
       </div>
+      
+      <button class="c-toggle-btn" aria-expanded="false" aria-controls="feeling-reveal-${i}" onclick="toggleCard(${i})">
+        Expose Clinical Analysis
+      </button>
     </div>
   `).join("");
+}
 
-  // Card Flip Click Event
-  feelingsRoot.querySelectorAll(".card-container").forEach(c => {
-    c.addEventListener("click", () => {
-      c.classList.toggle("flipped");
-    });
-  });
+function toggleCard(idx) {
+  const card = document.getElementById(`feeling-card-${idx}`);
+  const reveal = document.getElementById(`feeling-reveal-${idx}`);
+  const btn = card.querySelector(".c-toggle-btn");
+  
+  const isExpanded = card.classList.contains("expanded");
+  
+  if (isExpanded) {
+    card.classList.remove("expanded");
+    reveal.setAttribute("aria-hidden", "true");
+    btn.setAttribute("aria-expanded", "false");
+    btn.textContent = "Expose Clinical Analysis";
+  } else {
+    card.classList.add("expanded");
+    reveal.setAttribute("aria-hidden", "false");
+    btn.setAttribute("aria-expanded", "true");
+    btn.textContent = "Collapse Analysis";
+  }
 }
 
 // 2. Render Family II Accordion List
@@ -1120,7 +1257,7 @@ function renderActsAccordion() {
       
     return `
       <article class="entry">
-        <button class="entry-head" aria-expanded="${i === 0 ? 'true' : 'false'}" aria-controls="panel-${i}" id="head-${i}">
+        <button class="entry-head" aria-expanded="${i === 0 ? 'true' : 'false'}" aria-controls="panel-${i}" id="head-${i}" onclick="toggleAccordion(${i})">
           <span class="numeral">${d.num}</span>
           <span class="entry-titles">
             <span class="entry-name">${d.name}</span>
@@ -1128,7 +1265,7 @@ function renderActsAccordion() {
           </span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="panel" id="panel-${i}" role="region" aria-labelledby="head-${i}">
+        <div class="panel${i === 0 ? ' open' : ''}" id="panel-${i}" role="region" aria-labelledby="head-${i}">
           <div class="panel-inner">
             <div class="ground">
               <div class="glabel">Observed · the psychology</div>
@@ -1153,55 +1290,32 @@ function renderActsAccordion() {
         </div>
       </article>`;
   }).join("");
-
-  // Accordion Expand/Collapse Event
-  actsRoot.querySelectorAll(".entry-head").forEach(btn => {
-    const panel = document.getElementById(btn.getAttribute("aria-controls"));
-    if (btn.getAttribute("aria-expanded") === "true") {
-      panel.style.height = panel.scrollHeight + "px";
-    }
-    btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", String(!open));
-      if (open) {
-        panel.style.height = panel.scrollHeight + "px";
-        requestAnimationFrame(() => { panel.style.height = "0px"; });
-      } else {
-        panel.style.height = panel.scrollHeight + "px";
-        panel.addEventListener("transitionend", function te() {
-          panel.style.height = "auto";
-          panel.removeEventListener("transitionend", te);
-        });
-      }
-    });
-  });
 }
 
-// Keep panels sized properly on resize
-function resizeOpen() {
-  actsRoot.querySelectorAll('.entry-head[aria-expanded="true"]').forEach(btn => {
-    const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    panel.style.height = 'auto';
-    const h = panel.scrollHeight;
-    panel.style.height = h + 'px';
-    panel.addEventListener('transitionend', function te() {
-      panel.style.height = 'auto';
-      panel.removeEventListener('transitionend', te);
-    });
-  });
+function toggleAccordion(idx) {
+  const btn = document.getElementById(`head-${idx}`);
+  const panel = document.getElementById(`panel-${idx}`);
+  const isOpen = btn.getAttribute("aria-expanded") === "true";
+  
+  btn.setAttribute("aria-expanded", String(!isOpen));
+  if (isOpen) {
+    panel.classList.remove("open");
+  } else {
+    panel.classList.add("open");
+  }
 }
-window.addEventListener('resize', () => {
-  clearTimeout(window.__rt);
-  window.__rt = setTimeout(resizeOpen, 120);
-});
 
 // 3. Render Loop Visualizer view
 function renderLoopStep(stepIdx) {
-  const step = STEP_DEFS[stepIdx];
-  stepInfoCard.innerHTML = `
-    <h3>${step.title}</h3>
-    <p>${step.desc}</p>
-  `;
+  stepInfoCard.style.opacity = 0;
+  setTimeout(() => {
+    const step = STEP_DEFS[stepIdx];
+    stepInfoCard.innerHTML = `
+      <h3>${step.title}</h3>
+      <p>${step.desc}</p>
+    `;
+    stepInfoCard.style.opacity = 1;
+  }, 150);
   
   stepCompRoot.innerHTML = DATA_ACTS.map(d => `
     <div class="comp-cell">
@@ -1221,65 +1335,127 @@ document.querySelectorAll(".step-node").forEach(node => {
   });
 });
 
-// 4. Render Matrix View
+// 4. Render Matrix & Matrix Cards View
 function renderMatrix() {
-  let html = "";
+  let tableHtml = "";
+  let cardsHtml = "";
   
   // Render Family I
   DATA_FEELINGS.forEach(f => {
-    html += `
+    tableHtml += `
       <tr>
         <td>
           <span class="m-name">${f.name}</span>
           <span class="m-lbl">${f.sub}</span>
         </td>
-        <td class="mono" style="color: var(--muted);">Family I (Feeling)</td>
+        <td class="mono" style="color: var(--muted); font-size: 11px;">Family I (Feeling)</td>
         <td>${f.sensation}</td>
         <td>Intensity & Obsession</td>
         <td><b>Reality:</b> ${f.reality}</td>
       </tr>
     `;
+    
+    cardsHtml += `
+      <div class="matrix-card">
+        <h3>
+          <span>${f.name}</span>
+          <span class="m-lbl">${f.sub}</span>
+        </h3>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">Family</span>
+          <span class="matrix-card-val">Family I (Feeling mistaken for love)</span>
+        </div>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">Core Sensation</span>
+          <span class="matrix-card-val">${f.sensation}</span>
+        </div>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">The Clinical Reality</span>
+          <span class="matrix-card-val"><b>${f.reality}</b></span>
+        </div>
+      </div>
+    `;
   });
   
   // Render Family II
   DATA_ACTS.forEach(d => {
-    html += `
+    tableHtml += `
       <tr>
         <td>
           <span class="m-name">${d.name}</span>
           <span class="m-lbl">${d.mech}</span>
         </td>
-        <td class="mono" style="color: var(--orange);">Family II (Act)</td>
+        <td class="mono" style="color: var(--orange); font-size: 11px;">Family II (Act)</td>
         <td>${d.need}</td>
         <td>${d.tell}</td>
         <td>${d.turn}</td>
       </tr>
     `;
+    
+    cardsHtml += `
+      <div class="matrix-card">
+        <h3>
+          <span>${d.name}</span>
+          <span class="m-lbl">${d.mech}</span>
+        </h3>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">Family</span>
+          <span class="matrix-card-val">Family II (Act mistaken for love/care)</span>
+        </div>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">Core Driver / Need</span>
+          <span class="matrix-card-val">${d.need}</span>
+        </div>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">The Tell</span>
+          <span class="matrix-card-val">${d.tell}</span>
+        </div>
+        <div class="matrix-card-row">
+          <span class="matrix-card-lbl">True Turn</span>
+          <span class="matrix-card-val">${d.turn}</span>
+        </div>
+      </div>
+    `;
   });
   
-  matrixTbody.innerHTML = html;
+  matrixTbody.innerHTML = tableHtml;
+  matrixCardsRoot.innerHTML = cardsHtml;
 }
 
-// VIEW SWITCHER STATE
+// VIEW SWITCHER STATE (Integrated with View Transitions API)
 document.querySelectorAll(".view-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".view-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
     btn.setAttribute("aria-pressed", "true");
     
-    document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
-    const activePanel = document.getElementById(`view-${btn.dataset.view}`);
-    activePanel.classList.add("active");
-    
-    // Hide lens filters on views where it is not applicable
-    const lensContainer = document.getElementById("lens-toggle-container");
-    if (btn.dataset.view === "guided") {
-      lensContainer.style.display = "flex";
-      resizeOpen();
-    } else {
-      lensContainer.style.display = "none";
-    }
+    switchView(btn.dataset.view);
   });
 });
+
+function switchView(viewName) {
+  const updateDOM = () => {
+    document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+    const activePanel = document.getElementById(`view-${viewName}`);
+    activePanel.classList.add("active");
+    
+    // Show/Hide lens filter menu depending on active view
+    const lensContainer = document.getElementById("lens-toggle-container");
+    if (viewName === "guided") {
+      lensContainer.style.visibility = "visible";
+      lensContainer.style.opacity = "1";
+    } else {
+      lensContainer.style.visibility = "hidden";
+      lensContainer.style.opacity = "0";
+    }
+  };
+
+  // Trigger browser view transitions if supported
+  if (document.startViewTransition) {
+    document.startViewTransition(updateDOM);
+  } else {
+    updateDOM();
+  }
+}
 
 // LENS FILTER STATE
 document.querySelectorAll(".lens-btn").forEach(btn => {
@@ -1288,18 +1464,11 @@ document.querySelectorAll(".lens-btn").forEach(btn => {
     btn.setAttribute("aria-pressed", "true");
     
     document.body.setAttribute("data-lens", btn.dataset.lens);
-    resizeOpen();
   });
 });
 
 // 5. Diagnostic Interactive Panel Logic
 const diagState = [null, null, null];
-const feedbackMap = {
-  // Binary state representation: [q0, q1, q2]
-  // verb: true, feeling: false
-  // them: true, me: false
-  // two: true, fused: false
-};
 
 function updateDiagnosticFeedback() {
   const [q0, q1, q2] = diagState;
@@ -1317,7 +1486,7 @@ function updateDiagnosticFeedback() {
   
   if (isVerb && isThem && isTwo) {
     diagFeedback.innerHTML = `
-      <b style="color: #68BB59; display: block; margin-bottom: 4px;">Alignment: True Love</b>
+      <b style="color: #68BB59; display: block; margin-bottom: 4px; font-size: 15px;">Alignment: True Love</b>
       This dynamic functions as an active choice oriented to another's flourishment, holding separate boundaries. It is consistent, differentiation-safe, and healthy.
     `;
   } else {
@@ -1327,7 +1496,7 @@ function updateDiagnosticFeedback() {
     if (!isTwo) aspects.push("enmeshment demanding sameness");
     
     diagFeedback.innerHTML = `
-      <b style="color: var(--orange); display: block; margin-bottom: 4px;">Alignment: Counterfeit Loop</b>
+      <b style="color: var(--orange); display: block; margin-bottom: 4px; font-size: 15px;">Alignment: Counterfeit Loop</b>
       This dynamic contains extraction markers: ${aspects.join(", ")}. It is highly likely to generate exhaustion, resentment, or control.
     `;
   }
