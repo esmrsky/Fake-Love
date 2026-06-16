@@ -183,11 +183,18 @@
   }
 
   /* FAMILY I: EXPANDABLE CARDS GRID */
+  /* FAMILY I: EXPANDABLE CARDS GRID */
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
     padding: 16px 0 48px;
+  }
+  @media (max-width: 900px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
   }
   .feeling-card {
     background: var(--cream-2);
@@ -198,11 +205,19 @@
     flex-direction: column;
     box-shadow: var(--card-shadow);
     transition: transform 0.25s, box-shadow 0.25s;
-    height: auto; /* Eliminates the 250px overflow bug */
+    height: auto;
   }
   .feeling-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(28, 27, 25, 0.06);
+  }
+  .feeling-card:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+  @media (max-width: 900px) {
+    .feeling-card:last-child:nth-child(odd) {
+      grid-column: span 1;
+    }
   }
   .feeling-card .c-meta {
     display: flex;
@@ -231,29 +246,11 @@
     font-size: 11px;
     color: var(--muted);
     margin-top: 4px;
+    margin-bottom: 16px;
   }
-  .feeling-card .c-sensation {
-    margin-top: 16px;
-    font-size: 14.5px;
-    line-height: 1.5;
-    color: var(--ink);
-  }
-  
-  /* CSS Grid Expansion pattern for card reveal */
-  .feeling-card .c-reveal-panel {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .feeling-card .c-reveal-inner {
-    min-height: 0;
-    overflow: hidden;
-  }
-  .feeling-card.expanded .c-reveal-panel {
-    grid-template-rows: 1fr;
-  }
-  
-  .feeling-card .c-reality-block {
+  .feeling-card .c-sensation-block,
+  .feeling-card .c-reality-block,
+  .feeling-card .c-example-block {
     margin-top: 18px;
     padding-top: 18px;
     border-top: 1px solid var(--line);
@@ -271,39 +268,16 @@
     font-size: 14px;
     line-height: 1.45;
   }
+  .feeling-card .c-text.italic {
+    font-style: italic;
+  }
   .feeling-card .c-lit {
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;
     color: var(--muted);
-    margin-top: 14px;
+    margin-top: auto;
+    padding-top: 20px;
     display: block;
-  }
-  .feeling-card .c-toggle-btn {
-    margin-top: 20px;
-    background: transparent;
-    border: 1px solid var(--line-strong);
-    color: var(--ink);
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    padding: 8px 14px;
-    cursor: pointer;
-    border-radius: 2px;
-    width: 100%;
-    text-align: center;
-    transition: background 0.18s, color 0.18s, border-color 0.18s;
-  }
-  .feeling-card .c-toggle-btn:hover {
-    background: var(--ink);
-    color: var(--cream);
-    border-color: var(--ink);
-  }
-  .feeling-card .c-toggle-btn:focus-visible {
-    outline: var(--focus-ring);
-  }
-  .feeling-card.expanded .c-toggle-btn {
-    background: var(--muted);
-    color: var(--cream);
-    border-color: var(--muted);
   }
 
   /* FAMILY II: CSS GRID ACCORDIONS */
@@ -1055,7 +1029,8 @@ const DATA_FEELINGS = [
     sensation: "An intense, consuming focus on a person; feeling they are deeply important to your life, thinking about them constantly.",
     reality: "Emotional investment of energy (cathexis) is not love. You can cathect someone you do not actually know, respect, or actively act to support. Cathexis is a mental attachment; love is the action of caring.",
     lit: "M. Scott Peck (The Road Less Traveled) & bell hooks (All About Love)",
-    target: "Any extraction loop"
+    target: "Any extraction loop",
+    example: "A person spends months daydreaming about an acquaintance, crafting elaborate mental scenarios of a future together and feeling a profound 'bond,' but never initiates a real conversation to learn who they actually are."
   },
   {
     name: "Limerence",
@@ -1064,7 +1039,8 @@ const DATA_FEELINGS = [
     sensation: "Intense, involuntary craving for emotional reciprocation, obsessive mental loops, mood swings depending on their signals.",
     reality: "A dopamine-driven fantasy fueled by uncertainty. It requires a projection of the person rather than their actual reality.",
     lit: "Dorothy Tennov (Love and Limerence, 1979)",
-    target: "Love as a Drug"
+    target: "Love as a Drug",
+    example: "Analyzing every punctuation mark in their text messages, experiencing intense euphoria when they reply quickly, and crashing into physical despair or emptiness when response times drag."
   },
   {
     name: "The 'Anxious Spark'",
@@ -1073,7 +1049,8 @@ const DATA_FEELINGS = [
     sensation: "Heart-racing excitement, butterflies, high stakes, magnetic attraction, constant scanning for signals of interest.",
     reality: "Your nervous system detecting threat or unavailability, triggering an anxious attachment alarm. We mistake anxiety for passion.",
     lit: "Grounded in Attachment Theory (John Bowlby)",
-    target: "Love as Control"
+    target: "Love as Control",
+    example: "Feeling intense 'chemistry' only around partners who are emotionally distant or unpredictable. Feeling bored or assuming there is 'no spark' when interacting with someone who is consistent, warm, and secure."
   },
   {
     name: "Trauma-Bond Pull",
@@ -1082,7 +1059,8 @@ const DATA_FEELINGS = [
     sensation: "Ecstatic highs and devastating lows; feeling 'us against the world'; an addictive draw to a turbulent person.",
     reality: "A bond forged by cycles of abuse, neglect, or drama followed by sudden warmth. Pain followed by relief trains the brain to read conflict as intimacy.",
     lit: "Patrick Carnes (Against the Betrayal Bond)",
-    target: "Love as Rescue / Drug"
+    target: "Love as Rescue / Drug",
+    example: "Staying in a volatile cycle where a partner alternates between harsh criticism and sudden grand gestures of warmth, interpreting the emotional relief of reconciliation as proof of a 'soulmate connection.'"
   },
   {
     name: "Familiarity",
@@ -1091,7 +1069,8 @@ const DATA_FEELINGS = [
     sensation: "Low-friction coexistence, shared history, comfortable routine, avoidance of disruption.",
     reality: "An attachment of convenience. The comfort of predictability and fear of change mistaken for active, willing care for the other's growth.",
     lit: "Erich Fromm (The Art of Loving)",
-    target: "Love as a Mirror"
+    target: "Love as a Mirror",
+    example: "Coexisting in a roommate-like routine, avoiding difficult conversations to preserve the peace, and mistaking the comfortable habituation and fear of being alone for active care for each other's growth."
   }
 ];
 
@@ -1209,6 +1188,7 @@ const stepInfoCard = document.getElementById("step-info-card");
 const stepCompRoot = document.getElementById("step-comp-root");
 
 // 1. Render Family I Feelings Cards
+// 1. Render Family I Feelings Cards
 function renderFeelings() {
   feelingsRoot.innerHTML = DATA_FEELINGS.map((f, i) => `
     <div class="feeling-card" id="feeling-card-${i}">
@@ -1219,44 +1199,25 @@ function renderFeelings() {
       <div>
         <h3>${f.name}</h3>
         <div class="c-sub">${f.sub}</div>
-        <p class="c-sensation">${f.sensation}</p>
-      </div>
-      
-      <div class="c-reveal-panel" aria-hidden="true" id="feeling-reveal-${i}">
-        <div class="c-reveal-inner">
-          <div class="c-reality-block">
-            <span class="c-label">The Clinical Reality</span>
-            <p class="c-text"><b>${f.reality}</b></p>
-          </div>
-          <span class="c-lit">${f.lit}</span>
+        
+        <div class="c-sensation-block">
+          <span class="c-label">The Sensation</span>
+          <p class="c-text">${f.sensation}</p>
+        </div>
+        
+        <div class="c-reality-block">
+          <span class="c-label">Clinical Reality</span>
+          <p class="c-text"><b>${f.reality}</b></p>
+        </div>
+        
+        <div class="c-example-block">
+          <span class="c-label">Common Expression</span>
+          <p class="c-text italic">“${f.example}”</p>
         </div>
       </div>
-      
-      <button class="c-toggle-btn" aria-expanded="false" aria-controls="feeling-reveal-${i}" onclick="toggleCard(${i})">
-        Expose Clinical Analysis
-      </button>
+      <span class="c-lit">${f.lit}</span>
     </div>
   `).join("");
-}
-
-function toggleCard(idx) {
-  const card = document.getElementById(`feeling-card-${idx}`);
-  const reveal = document.getElementById(`feeling-reveal-${idx}`);
-  const btn = card.querySelector(".c-toggle-btn");
-  
-  const isExpanded = card.classList.contains("expanded");
-  
-  if (isExpanded) {
-    card.classList.remove("expanded");
-    reveal.setAttribute("aria-hidden", "true");
-    btn.setAttribute("aria-expanded", "false");
-    btn.textContent = "Expose Clinical Analysis";
-  } else {
-    card.classList.add("expanded");
-    reveal.setAttribute("aria-hidden", "false");
-    btn.setAttribute("aria-expanded", "true");
-    btn.textContent = "Collapse Analysis";
-  }
 }
 
 // 2. Render Family II Accordion List
