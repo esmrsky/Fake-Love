@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Counterfeit Loop — Reframed by Literature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0E0D0B;
+    --cream: #F2EBDC;
+    --cream-2: #E8DEC9;
+    --orange: #F3651C;
+    --muted: #6B655A;
+    --line: rgba(14,13,11,0.12);
+    --line-strong: rgba(14,13,11,0.24);
+    --cream-soft: rgba(242,235,220,0.62);
+    --cream-line: rgba(242,235,220,0.14);
+    --accent-blue: #2E5B88;
+    --card-shadow: 0 4px 20px rgba(14,13,11,0.04);
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero { padding: 80px 0 48px; border-bottom: 1px solid var(--line); }
+  .hero .eyebrow { margin-bottom: 24px; }
+  .hero h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6.8vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--orange); }
+  
+  .thesis {
+    margin-top: 30px;
+    max-width: 68ch;
+    font-size: clamp(17px, 2.3vw, 20px);
+    line-height: 1.6;
+    color: #2a2722;
+  }
+  .thesis b { font-weight: 600; }
+  .thesis i { font-style: italic; color: var(--orange); }
+
+  /* ---------- THE MEASURING STICK ---------- */
+  .measuring-stick {
+    margin-top: 36px;
+    padding: 24px 28px;
+    background: var(--cream-2);
+    border-left: 3px solid var(--orange);
+    border-radius: 2px;
+  }
+  .stick-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .stick-quote {
+    font-family: "Fraunces", serif;
+    font-size: 19px;
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .stick-author {
+    display: block;
+    margin-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---------- VIEW CONTROLS & LENSBAR ---------- */
+  .control-section {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    backdrop-filter: blur(8px);
+    background: rgba(242, 235, 220, 0.94);
+  }
+  .control-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .control-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .btn-group {
+    display: flex;
+    background: rgba(14, 13, 11, 0.05);
+    padding: 3px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .toggle-btn {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .toggle-btn:hover {
+    color: var(--ink);
+  }
+  .toggle-btn[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .toggle-btn:focus-visible {
+    outline: 2px solid var(--orange);
+  }
+
+  /* ---------- PANELS MANAGEMENT ---------- */
+  .view-panel { display: none; }
+  .view-panel.active { display: block; }
+
+  /* ---------- VIEW 1: GUIDED VIEW ---------- */
+  .section-intro {
+    padding: 48px 0 20px;
+    max-width: 60ch;
+  }
+  .section-intro h2 {
+    font-family: "Fraunces", serif;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .section-intro p {
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
+  /* FAMILY I: CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 16px 0 48px;
+  }
+  .card-container {
+    perspective: 1000px;
+    height: 250px;
+    cursor: pointer;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .card-container:hover .card {
+    transform: translateY(-4px);
+  }
+  .card-container.flipped .card {
+    transform: rotateY(180deg);
+  }
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--line-strong);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-front {
+    background: var(--cream-2);
+    box-shadow: var(--card-shadow);
+  }
+  .card-front .c-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-front .c-driver {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(243, 101, 28, 0.08);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .card-front h3 {
+    font-family: "Fraunces", serif;
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 16px;
+    line-height: 1.1;
+  }
+  .card-front .c-sub {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .card-front .c-hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: auto;
+  }
+  .card-back {
+    background: var(--ink);
+    color: var(--cream);
+    transform: rotateY(180deg);
+    border-color: var(--ink);
+  }
+  .card-back h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border-bottom: 1px solid var(--cream-line);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .card-back .c-section {
+    margin-bottom: 12px;
+  }
+  .card-back .c-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    color: var(--cream-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+  }
+  .card-back .c-text {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .card-back .c-lit {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--orange);
+    margin-top: auto;
+  }
+
+  /* FAMILY II: ACCORDIONS */
+  .accordion-wrap {
+    border-top: 1px solid var(--line);
+    margin-bottom: 64px;
+  }
+  .entry { border-bottom: 1px solid var(--line); }
+  .entry-head {
+    width: 100%; display: flex; align-items: baseline; gap: 20px;
+    background: transparent; border: 0; cursor: pointer; text-align: left;
+    padding: 28px 0; color: var(--ink);
+  }
+  .entry-head:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+  .numeral {
+    font-family: "Fraunces", serif; font-weight: 400; font-size: 22px;
+    color: var(--muted); min-width: 38px; font-feature-settings: "lnum";
+    line-height: 1; padding-top: 4px;
+  }
+  .entry-titles { flex: 1; min-width: 0; }
+  .entry-name {
+    font-family: "Fraunces", serif; font-weight: 500;
+    font-size: clamp(23px, 3.8vw, 32px); line-height: 1.1; letter-spacing: -0.01em;
+  }
+  .entry-mech {
+    margin-top: 6px; font-family: "JetBrains Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange);
+  }
+  .chev {
+    align-self: center; flex-shrink: 0; width: 20px; height: 20px; color: var(--muted);
+    transition: transform 0.3s ease;
+  }
+  .entry-head[aria-expanded="true"] .chev { transform: rotate(180deg); color: var(--ink); }
+
+  .panel { overflow: hidden; height: 0; transition: height 0.34s cubic-bezier(0.4, 0, 0.2, 1); }
+  .panel-inner { padding: 4px 0 36px; padding-left: 58px; }
+  @media(max-width: 620px) { .panel-inner { padding-left: 0; } }
+
+  /* Grounded details */
+  .ground .glabel {
+    font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .ground .glabel::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  
+  .row { display: grid; grid-template-columns: 118px 1fr; gap: 20px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .row:first-of-type { border-top: 0; }
+  .row dt {
+    font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); padding-top: 3px;
+  }
+  .row dd { font-size: 15px; line-height: 1.5; }
+  .row.tell dd { font-weight: 600; }
+  .row.echo dd { color: #524e46; font-style: italic; }
+  @media(max-width: 540px) {
+    .row { grid-template-columns: 1fr; gap: 4px; }
+    .row dt { padding-top: 0; }
+  }
+
+  /* Interactive read block */
+  .read {
+    margin-top: 26px; background: var(--ink); color: var(--cream);
+    border-radius: 2px; padding: 28px 28px 32px;
+  }
+  .read .rlabel {
+    font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--orange); margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .read .rlabel::after { content: ""; flex: 1; height: 1px; background: var(--cream-line); }
+  
+  .idol { font-family: "Fraunces", serif; font-size: clamp(18px, 2.5vw, 22px); line-height: 1.4; font-weight: 400; color: var(--cream); }
+  .idol b { color: var(--orange); font-weight: 500; }
+
+  /* Loop horizontal display */
+  .loop { margin-top: 24px; display: flex; align-items: stretch; gap: 0; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+  .beat { flex: 1 1 0; min-width: 100px; padding: 0 10px; position: relative; }
+  .beat:not(:last-child)::after {
+    content: "\2192"; position: absolute; right: -5px; top: 2px; color: var(--cream-soft); font-size: 12px;
+  }
+  .beat .bk { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-soft); display: block; margin-bottom: 6px; }
+  .beat .bv { font-size: 12.5px; line-height: 1.35; color: var(--cream); }
+  .beat.idol-beat { background: rgba(243,101,28,0.12); border-radius: 2px; padding: 10px 10px; margin: -10px 0; }
+  .beat.idol-beat .bk { color: var(--orange); }
+  @media(max-width: 620px) { .loop { gap: 2px; } .beat { min-width: 112px; } }
+
+  /* True love turn */
+  .turn { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--cream-line); }
+  .turn .tk { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-soft); margin-bottom: 10px; }
+  .turn .tv { font-size: 15.5px; line-height: 1.5; color: var(--cream); }
+  .turn .tv b { color: #fff; font-weight: 600; }
+
+  /* Lens filtering for accordion rows */
+  body[data-lens="romantic"] .row.parenting,
+  body[data-lens="romantic"] .row.echo { display: none; }
+  body[data-lens="parenting"] .row.romantic { display: none; }
+
+  /* ---------- VIEW 2: THE LOOP VISUALIZER ---------- */
+  .loop-visualizer {
+    padding: 40px 0 64px;
+  }
+  .stepper-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .step-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 80px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    background: transparent;
+    transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+    color: var(--muted);
+  }
+  .step-node:hover .step-circle {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .step-node.active .step-circle {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--cream);
+  }
+  .step-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    color: var(--muted);
+  }
+  .step-node.active .step-name {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  
+  .step-display-card {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 32px;
+    border-radius: 4px;
+    margin-bottom: 36px;
+  }
+  .step-display-card h3 {
+    font-family: "Fraunces", serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .step-display-card p {
+    font-size: 16px;
+    color: var(--cream-soft);
+    max-width: 70ch;
+  }
+
+  .step-comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .comp-cell {
+    background: var(--cream-2);
+    border: 1px solid var(--line-strong);
+    padding: 20px;
+    border-radius: 2px;
+  }
+  .comp-cell h4 {
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 6px;
+  }
+  .comp-cell .comp-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--orange);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .comp-cell p {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+
+  /* ---------- VIEW 3: THE MATRIX ---------- */
+  .matrix-view {
+    padding: 40px 0 64px;
+    overflow-x: auto;
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    line-height: 1.4;
+    text-align: left;
+    min-width: 800px;
+  }
+  .matrix-table th, .matrix-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--line-strong);
+    vertical-align: top;
+  }
+  .matrix-table th {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    background: rgba(14, 13, 11, 0.03);
+  }
+  .matrix-table tr:hover {
+    background: rgba(14, 13, 11, 0.01);
+  }
+  .matrix-table .m-name {
+    font-family: "Fraunces", serif;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .matrix-table .m-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    color: var(--orange);
+    text-transform: uppercase;
+    display: block;
+  }
+
+  /* ---------- THE THREE DISCRIMINATORS ---------- */
+  .discriminator-section {
+    padding: 72px 0 64px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .discriminator-section .eyebrow { margin-bottom: 20px; }
+  .discriminator-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  @media(max-width: 780px) {
+    .discriminator-layout { grid-template-columns: 1fr; gap: 32px; }
+  }
+  
+  .disc-text h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-bottom: 24px;
+  }
+  .disc-text p {
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: #2a2722;
+    margin-bottom: 16px;
+  }
+  .disc-highlight {
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--orange);
+    background: var(--cream-2);
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  
+  /* DIAGNOSTIC INTERACTIVE PANEL */
+  .diagnostic-panel {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 32px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .diagnostic-panel h3 {
+    font-family: "Fraunces", serif;
+    font-size: 22px;
+    margin-bottom: 16px;
+    font-weight: 500;
+    color: var(--orange);
+  }
+  .diag-q {
+    margin-bottom: 20px;
+  }
+  .diag-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--cream-soft);
+    margin-bottom: 8px;
+    display: block;
+    letter-spacing: 0.08em;
+  }
+  .diag-opts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .diag-btn {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 12.5px;
+    padding: 8px 12px;
+    background: rgba(242, 235, 220, 0.06);
+    border: 1px solid var(--cream-line);
+    color: var(--cream-soft);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .diag-btn:hover {
+    background: rgba(242, 235, 220, 0.12);
+    color: var(--cream);
+  }
+  .diag-btn.selected {
+    background: var(--cream);
+    color: var(--ink);
+    border-color: var(--cream);
+    font-weight: 500;
+  }
+  
+  .diag-result {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cream-line);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .diag-res-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .diag-res-text {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--cream);
+  }
+
+  /* ---------- THE CLOSE / OVERFLOW ---------- */
+  .close { background: var(--ink); color: var(--cream); padding: 80px 0 90px; }
+  .close .eyebrow { color: var(--orange); margin-bottom: 26px; }
+  .close h2 { font-family: "Fraunces", serif; font-weight: 500; font-size: clamp(30px, 5.2vw, 48px); line-height: 1.08; letter-spacing: -0.012em; }
+  .close h2 em { font-style: italic; font-weight: 400; color: var(--orange); }
+  .close p { margin-top: 24px; max-width: 62ch; font-size: 17px; line-height: 1.6; color: var(--cream-soft); }
+  .close p b { color: var(--cream); font-weight: 500; }
+  .close .seq { margin-top: 36px; font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--cream); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .close .seq span { color: var(--cream-soft); }
+
+  footer { padding: 32px 0; border-top: 1px solid var(--cream-line); font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.08em; color: var(--cream-soft); background: var(--ink); }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media(prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body data-lens="both">
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">The Counterfeit Loop · A Field Guide</div>
+      <h1>Love as a <em>verb</em>,<br>and its counterfeits.</h1>
+      <p class="thesis">
+        The psychological and clinical literature converges: <b>love is not a passive feeling, but an active choice</b>. When we conflate emotional investment (<i>cathexis</i>) or self-stabilization with love, we construct counterfeits where the other person is used to fill our own deficits.
+      </p>
+      
+      <div class="measuring-stick">
+        <span class="stick-title">The Measuring Stick</span>
+        <blockquote class="stick-quote">
+          "Love is the will to extend one's self for the purpose of nurturing one's own or another's spiritual growth... Love is an action, never simply a feeling. It is as love does."
+        </blockquote>
+        <span class="stick-author">— Synthesized from M. Scott Peck & bell hooks</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- VIEW CONTROLSSTICKY BAR -->
+  <div class="control-section">
+    <div class="wrap control-wrap">
+      <div class="control-group">
+        <span class="control-label">View</span>
+        <div class="btn-group" role="group" aria-label="Toggle views">
+          <button class="toggle-btn view-btn" data-view="guided" aria-pressed="true">Guided Guide</button>
+          <button class="toggle-btn view-btn" data-view="loop" aria-pressed="false">The Loop Cycle</button>
+          <button class="toggle-btn view-btn" data-view="matrix" aria-pressed="false">Diagnostic Matrix</button>
+        </div>
+      </div>
+      
+      <div class="control-group" id="lens-toggle-container">
+        <span class="control-label">Lens</span>
+        <div class="btn-group" role="group" aria-label="Filter context">
+          <button class="toggle-btn lens-btn" data-lens="both" aria-pressed="true">Both</button>
+          <button class="toggle-btn lens-btn" data-lens="romantic" aria-pressed="false">Romantic</button>
+          <button class="toggle-btn lens-btn" data-lens="parenting" aria-pressed="false">Parenting</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    
+    <!-- VIEW 1: GUIDED VIEW -->
+    <section id="view-guided" class="view-panel active">
+      
+      <!-- FAMILY I SECTION -->
+      <div class="section-intro">
+        <span class="mono" style="color: var(--orange); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;">Family I</span>
+        <h2>Feelings Mistaken for Love</h2>
+        <p>The "Noun Errors" — emotional intensities, biological charges, or attachment systems that mimic love, but operate on automatic nervous system responses rather than willing action.</p>
+      </div>
+      
+      <div class="cards-grid" id="feelings-root"><!-- JS rendered --></div>
+      
+      <!-- FAMILY II SECTION -->
+      <div class="section-intro" style="border-top: 1px solid var(--line); padding-top: 48px;">
+        <span class="mono" style="color: var(--orange); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;">Family II</span>
+        <h2>Acts Mistaken for Love & Care</h2>
+        <p>The "False-Verb Errors" — extractive behaviors where we perform care for another, but the underlying drive is to relieve our own internal scarcity or anxiety.</p>
+      </div>
+      
+      <div class="accordion-wrap" id="acts-root"><!-- JS rendered --></div>
+
+    </section>
+
+    <!-- VIEW 2: LOOP CYCLE VISUALIZER -->
+    <section id="view-loop" class="view-panel">
+      <div class="loop-visualizer">
+        <div class="section-intro" style="padding-top: 20px;">
+          <h2>Anatomy of the Loop</h2>
+          <p>Every counterfeit act follows a cyclical blueprint. Click each step below to see how the seven False-Verb counterfeits manifest at that exact phase of the extraction loop.</p>
+        </div>
+        
+        <nav class="stepper-nav" aria-label="Loop cycle steps">
+          <div class="step-node active" data-step="0">
+            <span class="step-circle">1</span>
+            <span class="step-name">Wound</span>
+          </div>
+          <div class="step-node" data-step="1">
+            <span class="step-circle">2</span>
+            <span class="step-name">Offer</span>
+          </div>
+          <div class="step-node" data-step="2">
+            <span class="step-circle">3</span>
+            <span class="step-name">Idol</span>
+          </div>
+          <div class="step-node" data-step="3">
+            <span class="step-circle">4</span>
+            <span class="step-name">Altar</span>
+          </div>
+          <div class="step-node" data-step="4">
+            <span class="step-circle">5</span>
+            <span class="step-name">Structure</span>
+          </div>
+        </nav>
+        
+        <div class="step-display-card" id="step-info-card">
+          <!-- JS dynamic -->
+        </div>
+        
+        <div class="step-comparison-grid" id="step-comp-root">
+          <!-- JS dynamic -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: DIAGNOSTIC MATRIX -->
+    <section id="view-matrix" class="view-panel">
+      <div class="matrix-view">
+        <div class="section-intro" style="padding-top: 20px; max-width: 100%;">
+          <h2>The Diagnostic Matrix</h2>
+          <p>A comprehensive side-by-side catalog comparing the core mechanisms, tells, and alignment resolutions for all 12 counterfeits.</p>
+        </div>
+        
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Type</th>
+              <th style="width: 15%;">Family</th>
+              <th style="width: 25%;">Core Driver / Need</th>
+              <th style="width: 20%;">The Tell</th>
+              <th style="width: 20%;">True Turn</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-tbody">
+            <!-- JS dynamic -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- THE THREE DISCRIMINATORS SECTION -->
+    <section class="discriminator-section">
+      <div class="discriminator-layout">
+        <div class="disc-text">
+          <div class="eyebrow">The Litmus Test</div>
+          <h2>Is it Love or is it Cathexis?</h2>
+          <p>If you are struggling to discern whether a relationship pattern (romantic or parental) is rooted in true love or a counterfeit attachment, run it through the three core diagnostic splits established in clinical literature.</p>
+          <p>True love protects the other's freedom and separation. Counterfeits experience freedom as a threat to their emotional safety.</p>
+          <div class="disc-highlight">
+            "The signature of love is consistency and peace, supporting the other’s journey outward. The signature of attachment is high-stakes intensity and hyper-vigilance."
+          </div>
+        </div>
+        
+        <div class="diagnostic-panel">
+          <div>
+            <h3>The Discriminator Diagnostic</h3>
+            
+            <div class="diag-q" data-q="0">
+              <span class="diag-lbl">1. Verb or Feeling?</span>
+              <div class="diag-opts">
+                <button class="diag-btn" data-val="feeling">A feeling/spark I'm experiencing</button>
+                <button class="diag-btn" data-val="verb">Active efforts for their growth</button>
+              </div>
+            </div>
+            
+            <div class="diag-q" data-q="1">
+              <span class="diag-lbl">2. Them or Me?</span>
+              <div class="diag-opts">
+                <button class="diag-btn" data-val="me">Stabilizing my own state/worth</button>
+                <button class="diag-btn" data-val="them">Their long-term independent flourishing</button>
+              </div>
+            </div>
+            
+            <div class="diag-q" data-q="2">
+              <span class="diag-lbl">3. Two Selves or Fused?</span>
+              <div class="diag-opts">
+                <button class="diag-btn" data-val="fused">Enmeshment / Demand for sameness</button>
+                <button class="diag-btn" data-val="two">Differentiation / Welcoming freedom</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="diag-result">
+            <span class="diag-res-lbl">Diagnostic Result</span>
+            <div class="diag-res-text" id="diag-feedback">
+              Select options above to audit your current dynamic.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="close">
+    <div class="wrap">
+      <div class="eyebrow">The Turning Point</div>
+      <h2>Abundance before the offer.</h2>
+      <p>
+        Every counterfeit is an attempt to <b>extract</b> from a person what is missing in ourselves — safety, worth, peace, justification. That is why it deforms into control or obsession. We hand a human the weight only a transcendent source of grace was meant to carry, crushing both them and ourselves.
+      </p>
+      <p>
+        Love cannot be willed out of starvation. The cure is not simply "trying harder" to act selflessly. It is being filled at the source first, so the other is released from being your savior and can finally be received as a gift.
+      </p>
+      <div class="seq">Filled at the source <span>→</span> the other freed from carrying it <span>→</span> love that gives without invoicing</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>THE COUNTERFEIT GUIDE</span>
+      <span>WOUND → OFFER → CATHEXIS → ALTAR → STRUCTURE</span>
+    </div>
+  </footer>
+
+<script>
+// FAMILY I DATA
+const DATA_FEELINGS = [
+  {
+    name: "Cathexis",
+    sub: "The Hook of Investment",
+    driver: "Mental/Emotional Charge",
+    sensation: "An intense, consuming focus on a person; feeling they are deeply important to your life, thinking about them constantly.",
+    reality: "Emotional investment of energy (cathexis) is not love. You can cathect someone you do not actually know, respect, or actively act to support. Cathexis is a mental attachment; love is the action of caring.",
+    lit: "M. Scott Peck (The Road Less Traveled) & bell hooks (All About Love)",
+    target: "Any extraction loop"
+  },
+  {
+    name: "Limerence",
+    sub: "The Obsessive Spark",
+    driver: "Dopamine & Uncertainty",
+    sensation: "Intense, involuntary craving for emotional reciprocation, obsessive mental loops, mood swings depending on their signals.",
+    reality: "A dopamine-driven fantasy fueled by uncertainty. It requires a projection of the person rather than their actual reality.",
+    lit: "Dorothy Tennov (Love and Limerence, 1979)",
+    target: "Love as a Drug"
+  },
+  {
+    name: "The 'Anxious Spark'",
+    sub: "Chemistry of Unpredictability",
+    driver: "Cortisol & Attachment Alarm",
+    sensation: "Heart-racing excitement, butterflies, high stakes, magnetic attraction, constant scanning for signals of interest.",
+    reality: "Your nervous system detecting threat or unavailability, triggering an anxious attachment alarm. We mistake anxiety for passion.",
+    lit: "Grounded in Attachment Theory (John Bowlby)",
+    target: "Love as Control"
+  },
+  {
+    name: "Trauma-Bond Pull",
+    sub: "Intensity Mistaken for Depth",
+    driver: "Intermittent Reinforcement",
+    sensation: "Ecstatic highs and devastating lows; feeling 'us against the world'; an addictive draw to a turbulent person.",
+    reality: "A bond forged by cycles of abuse, neglect, or drama followed by sudden warmth. Pain followed by relief trains the brain to read conflict as intimacy.",
+    lit: "Patrick Carnes (Against the Betrayal Bond)",
+    target: "Love as Rescue / Drug"
+  },
+  {
+    name: "Familiarity",
+    sub: "The Static Connection",
+    driver: "Comfort of the Known",
+    sensation: "Low-friction coexistence, shared history, comfortable routine, avoidance of disruption.",
+    reality: "An attachment of convenience. The comfort of predictability and fear of change mistaken for active, willing care for the other's growth.",
+    lit: "Erich Fromm (The Art of Loving)",
+    target: "Love as a Mirror"
+  }
+];
+
+// FAMILY II DATA
+const DATA_ACTS = [
+  {
+    num: "I", name: "Love as a Drug", mech: "Regulation",
+    need: "I cannot regulate my own inner state, so I borrow yours to do it.",
+    romantic: "Limerence and codependency. Your mood sets mine; one text rewrites my whole day; I consume your presence to feel level.",
+    parenting: "Parentification. The child becomes the parent's soother and confidant — managing the adult's feelings to keep them okay.",
+    echo: "A parentified child learns that their value lies in emotional containment, growing up to seek partners whose unstable mood they must regulate.",
+    tell: "I need your state to fix mine.",
+    idol: "The person becomes your <b>peace</b> — the steadiness you were meant to find in God, outsourced to a human nervous system.",
+    loop: ["Unregulated ache", "They soothe it", "They become my peace", "I orient the day around their signals", "I'm only okay if they're okay"],
+    turn: "A self that can be held — that can self-soothe and rest in God — can be <b>with</b> the other instead of feeding on them. Presence, not consumption."
+  },
+  {
+    num: "II", name: "Love as a Mirror", mech: "Validation",
+    need: "I don't know my own worth, so I need you to reflect it back.",
+    romantic: "Loving how they make you feel about yourself. Needing constant reassurance; in love with the admiration more than the person.",
+    parenting: "The child as ego-extension. Living through their wins; their achievement feeds my self-image, their failure shames me.",
+    echo: "A child loved only as an ego-extension grows up to equate achievement and validation with love, constantly performing to keep the mirror kind.",
+    tell: "Love warms when they make me look good, cools when they don't.",
+    idol: "The person becomes your <b>verdict</b> — your sense of being acceptable rests on their reflection instead of on being already beloved.",
+    loop: ["Am I worth anything?", "Their admiration says yes", "They become my verdict", "I perform to keep the mirror kind", "Identity contingent on approval"],
+    turn: "Worth received as a given — belovedness that precedes performance — frees you to actually <b>see</b> the other instead of using them as glass."
+  },
+  {
+    num: "III", name: "Love as Control", mech: "Possession",
+    need: "I secure myself by controlling you; your freedom feels like my danger.",
+    romantic: "Jealousy, monitoring, engulfment. 'If you loved me you'd...' Closeness measured by how much you'll surrender.",
+    parenting: "Overcontrol; love conditional on compliance. The child's individuation experienced as betrayal rather than growth.",
+    echo: "A child raised under overcontrol equates closeness with the surrender of self, leading them to either control partners or seek engulfment.",
+    tell: "The other's separateness feels like a threat.",
+    idol: "The person becomes your <b>security</b> — you trust your grip more than you trust God to hold what you can't.",
+    loop: ["Fear of abandonment / chaos", "If I control you, I'm safe", "Control becomes my security", "I sacrifice your freedom to my fear", "Love means grip"],
+    turn: "Security held elsewhere lets you open your hand. Love strong enough to <b>bless the other's freedom</b> — even the freedom to leave."
+  },
+  {
+    num: "IV", name: "Love as Debt", mech: "Transaction",
+    need: "I can't trust love freely given, so I bind it with obligation.",
+    romantic: "Scorekeeping. Love advanced to be owed. 'I did this, so now you owe me that.' Ledgers.",
+    parenting: "'After all I've done for you.' Guilt as the binding agent; sacrifice quietly weaponized into leverage.",
+    echo: "A child trained in transactional love grows up to keep a ledger, terrified of grace and unable to receive love without checking the invoice.",
+    tell: "There's an invisible ledger, and I'm always reading it.",
+    idol: "The relationship becomes your <b>justification</b> — you earn and extract instead of receiving and extending grace.",
+    loop: ["Love must be earned", "A ledger makes it predictable", "The exchange becomes my justification", "I keep paying and collecting", "Grace is impossible; all is owed"],
+    turn: "Grace received — unearned, un-repayable — dissolves the ledger. Love that <b>gives without invoicing</b> because it was first given to."
+  },
+  {
+    num: "V", name: "Love as Rescue", mech: "The Project",
+    need: "I love by fixing — which keeps me needed and lets me avoid my own wound.",
+    romantic: "The savior / fixer dynamic. Falling for potential; managing the other's life; loving the version I'm building.",
+    parenting: "Over-functioning, helicoptering. Can't let the child struggle or fail; their growing competence quietly threatens my role.",
+    echo: "An over-functioning child learns they are only safe when useful, seeking broken partners in adulthood to maintain their worth.",
+    tell: "I need you to need me.",
+    idol: "You make yourself the person's <b>savior</b> — taking the seat only God can hold, and calling the takeover love.",
+    loop: ["I'm only valuable if useful", "Being your rescuer makes me valuable", "Being needed becomes my worth", "I keep you dependent", "Love means fixing"],
+    turn: "A worth not contingent on being needed lets you support without engulfing — and lets the other outgrow you. <b>Love that launches.</b>"
+  },
+  {
+    num: "VI", name: "Love as Indulgence", mech: "Permissiveness",
+    need: "I want to be liked or avoid conflict, so I give you whatever you want.",
+    romantic: "People-pleasing, never saying no, allowing boundaries to be overrun to keep peace. Relentless compliance.",
+    parenting: "Permissive parenting. Shielding children from consequences; refusing to set boundaries to avoid their discomfort or anger.",
+    echo: "A child raised without boundaries struggles with limits in adulthood, equating rules with rejection and pleasing to survive.",
+    tell: "I cannot tolerate your discomfort or anger with me.",
+    idol: "The relationship becomes your <b>comfort/approval</b> — you sacrifice their character growth to avoid temporary friction.",
+    loop: ["Fear of conflict/disapproval", "I indulge them", "They are temporarily happy/quiet", "I avoid setting boundaries", "They become entitled/stunted"],
+    turn: "Real love is willing to be disliked for the other's long-term good. It sets boundaries that protect their character and maturity."
+  },
+  {
+    num: "VII", name: "Love as Worry", mech: "Anxiety-as-Care",
+    need: "My own anxiety is unmanageable, so I wrap it in 'concern' to control your movements.",
+    romantic: "Constant checking-in, catastrophizing their plans, restricting their risks in the name of safety.",
+    parenting: "Overprotection, helicoptering. Projecting my fears onto the child so they are afraid of the world and stay close.",
+    echo: "A child raised in an anxious, overprotective environment grows up viewing the world as hyper-dangerous and struggles to differentiate.",
+    tell: "I count my anxiety as proof of how much I care about you.",
+    idol: "The other's safety becomes your <b>shield against chaos</b> — you make them carry your fear.",
+    loop: ["Internal anxiety/catastrophizing", "I restrict/overprotect you", "I feel temporarily relieved", "You absorb the fear and withdraw", "The world is scary; you must stay close"],
+    turn: "Love casts out fear. True care supports the other's brave engagement with the world, taking healthy risks and welcoming growth."
+  }
+];
+
+// LOOP STEP DEFINITIONS
+const STEP_DEFS = [
+  {
+    title: "1. The Wound (Scarcity)",
+    desc: "The initial emotional void or deficit in our own system. This is the structural vulnerability that demands stabilization."
+  },
+  {
+    title: "2. The Offer (The Bait)",
+    desc: "How the other person or relation promises to temporarily soothe or fill that wound. It is the initial hook of attachment."
+  },
+  {
+    title: "3. The Idol (Cathexis)",
+    desc: "The other person is elevated to the source of what we cannot find in ourselves. They carry the ultimate weight of our peace, worth, or safety."
+  },
+  {
+    title: "4. The Altar (The Sacrifice)",
+    desc: "What we must sacrifice or deform in order to keep the idol in place. Usually involves sacrificing their freedom or our boundaries."
+  },
+  {
+    title: "5. The Mental Structure (The Captivity)",
+    desc: "The rigid, locked-in relational script. The boundary collapses entirely, and the counterfeit pattern becomes a persistent pattern of extraction."
+  }
+];
+
+// INITIALIZE INTERACTIVE COMPONENTS
+const feelingsRoot = document.getElementById("feelings-root");
+const actsRoot = document.getElementById("acts-root");
+const matrixTbody = document.getElementById("matrix-tbody");
+const stepInfoCard = document.getElementById("step-info-card");
+const stepCompRoot = document.getElementById("step-comp-root");
+
+// 1. Render Family I Feelings Cards
+function renderFeelings() {
+  feelingsRoot.innerHTML = DATA_FEELINGS.map(f => `
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front">
+          <div class="c-meta">
+            <span class="eyebrow">Feelings</span>
+            <span class="c-driver">${f.driver}</span>
+          </div>
+          <div>
+            <h3>${f.name}</h3>
+            <div class="c-sub">${f.sub}</div>
+          </div>
+          <div class="c-hint">Tap to expose reality &rarr;</div>
+        </div>
+        <div class="card-back">
+          <h4>The Anatomy of ${f.name}</h4>
+          <div class="c-section">
+            <span class="c-label">The Sensation</span>
+            <p class="c-text">${f.sensation}</p>
+          </div>
+          <div class="c-section">
+            <span class="c-label">The Clinical Reality</span>
+            <p class="c-text"><b>${f.reality}</b></p>
+          </div>
+          <div class="c-lit">${f.lit}</div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  // Card Flip Click Event
+  feelingsRoot.querySelectorAll(".card-container").forEach(c => {
+    c.addEventListener("click", () => {
+      c.classList.toggle("flipped");
+    });
+  });
+}
+
+// 2. Render Family II Accordion List
+const LOOP_KEYS = ["Wound", "Offer", "Idol", "Altar", "Structure"];
+function renderActsAccordion() {
+  actsRoot.innerHTML = DATA_ACTS.map((d, i) => {
+    const loopBeats = d.loop.map((v, idx) => `
+      <div class="beat${idx === 2 ? ' idol-beat' : ''}">
+        <span class="bk">${LOOP_KEYS[idx]}</span>
+        <span class="bv">${v}</span>
+      </div>`).join("");
+      
+    return `
+      <article class="entry">
+        <button class="entry-head" aria-expanded="${i === 0 ? 'true' : 'false'}" aria-controls="panel-${i}" id="head-${i}">
+          <span class="numeral">${d.num}</span>
+          <span class="entry-titles">
+            <span class="entry-name">${d.name}</span>
+            <span class="entry-mech">${d.mech}</span>
+          </span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="panel" id="panel-${i}" role="region" aria-labelledby="head-${i}">
+          <div class="panel-inner">
+            <div class="ground">
+              <div class="glabel">Observed · the psychology</div>
+              <dl>
+                <div class="row"><dt>The need</dt><dd>${d.need}</dd></div>
+                <div class="row romantic"><dt>Romantic</dt><dd>${d.romantic}</dd></div>
+                <div class="row parenting"><dt>Parenting</dt><dd>${d.parenting}</dd></div>
+                <div class="row echo"><dt>The Echo</dt><dd>${d.echo}</dd></div>
+                <div class="row tell"><dt>The tell</dt><dd>${d.tell}</dd></div>
+              </dl>
+            </div>
+            <div class="read">
+              <div class="rlabel">The read · the Counterfeit Loop</div>
+              <p class="idol">${d.idol}</p>
+              <div class="loop">${loopBeats}</div>
+              <div class="turn">
+                <div class="tk">The true-love turn</div>
+                <p class="tv">${d.turn}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+
+  // Accordion Expand/Collapse Event
+  actsRoot.querySelectorAll(".entry-head").forEach(btn => {
+    const panel = document.getElementById(btn.getAttribute("aria-controls"));
+    if (btn.getAttribute("aria-expanded") === "true") {
+      panel.style.height = panel.scrollHeight + "px";
+    }
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      if (open) {
+        panel.style.height = panel.scrollHeight + "px";
+        requestAnimationFrame(() => { panel.style.height = "0px"; });
+      } else {
+        panel.style.height = panel.scrollHeight + "px";
+        panel.addEventListener("transitionend", function te() {
+          panel.style.height = "auto";
+          panel.removeEventListener("transitionend", te);
+        });
+      }
+    });
+  });
+}
+
+// Keep panels sized properly on resize
+function resizeOpen() {
+  actsRoot.querySelectorAll('.entry-head[aria-expanded="true"]').forEach(btn => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    panel.style.height = 'auto';
+    const h = panel.scrollHeight;
+    panel.style.height = h + 'px';
+    panel.addEventListener('transitionend', function te() {
+      panel.style.height = 'auto';
+      panel.removeEventListener('transitionend', te);
+    });
+  });
+}
+window.addEventListener('resize', () => {
+  clearTimeout(window.__rt);
+  window.__rt = setTimeout(resizeOpen, 120);
+});
+
+// 3. Render Loop Visualizer view
+function renderLoopStep(stepIdx) {
+  const step = STEP_DEFS[stepIdx];
+  stepInfoCard.innerHTML = `
+    <h3>${step.title}</h3>
+    <p>${step.desc}</p>
+  `;
+  
+  stepCompRoot.innerHTML = DATA_ACTS.map(d => `
+    <div class="comp-cell">
+      <span class="comp-lbl">${d.name} (${d.mech})</span>
+      <h4>${LOOP_KEYS[stepIdx]}</h4>
+      <p>${d.loop[stepIdx]}</p>
+    </div>
+  `).join("");
+}
+
+// Stepper click handlers
+document.querySelectorAll(".step-node").forEach(node => {
+  node.addEventListener("click", () => {
+    document.querySelectorAll(".step-node").forEach(n => n.classList.remove("active"));
+    node.classList.add("active");
+    renderLoopStep(parseInt(node.dataset.step));
+  });
+});
+
+// 4. Render Matrix View
+function renderMatrix() {
+  let html = "";
+  
+  // Render Family I
+  DATA_FEELINGS.forEach(f => {
+    html += `
+      <tr>
+        <td>
+          <span class="m-name">${f.name}</span>
+          <span class="m-lbl">${f.sub}</span>
+        </td>
+        <td class="mono" style="color: var(--muted);">Family I (Feeling)</td>
+        <td>${f.sensation}</td>
+        <td>Intensity & Obsession</td>
+        <td><b>Reality:</b> ${f.reality}</td>
+      </tr>
+    `;
+  });
+  
+  // Render Family II
+  DATA_ACTS.forEach(d => {
+    html += `
+      <tr>
+        <td>
+          <span class="m-name">${d.name}</span>
+          <span class="m-lbl">${d.mech}</span>
+        </td>
+        <td class="mono" style="color: var(--orange);">Family II (Act)</td>
+        <td>${d.need}</td>
+        <td>${d.tell}</td>
+        <td>${d.turn}</td>
+      </tr>
+    `;
+  });
+  
+  matrixTbody.innerHTML = html;
+}
+
+// VIEW SWITCHER STATE
+document.querySelectorAll(".view-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".view-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+    btn.setAttribute("aria-pressed", "true");
+    
+    document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+    const activePanel = document.getElementById(`view-${btn.dataset.view}`);
+    activePanel.classList.add("active");
+    
+    // Hide lens filters on views where it is not applicable
+    const lensContainer = document.getElementById("lens-toggle-container");
+    if (btn.dataset.view === "guided") {
+      lensContainer.style.display = "flex";
+      resizeOpen();
+    } else {
+      lensContainer.style.display = "none";
+    }
+  });
+});
+
+// LENS FILTER STATE
+document.querySelectorAll(".lens-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".lens-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+    btn.setAttribute("aria-pressed", "true");
+    
+    document.body.setAttribute("data-lens", btn.dataset.lens);
+    resizeOpen();
+  });
+});
+
+// 5. Diagnostic Interactive Panel Logic
+const diagState = [null, null, null];
+const feedbackMap = {
+  // Binary state representation: [q0, q1, q2]
+  // verb: true, feeling: false
+  // them: true, me: false
+  // two: true, fused: false
+};
+
+function updateDiagnosticFeedback() {
+  const [q0, q1, q2] = diagState;
+  const diagFeedback = document.getElementById("diag-feedback");
+  
+  if (q0 === null || q1 === null || q2 === null) {
+    diagFeedback.innerHTML = "Select options above to audit your current dynamic.";
+    diagFeedback.style.color = "var(--cream-soft)";
+    return;
+  }
+  
+  const isVerb = q0 === "verb";
+  const isThem = q1 === "them";
+  const isTwo = q2 === "two";
+  
+  if (isVerb && isThem && isTwo) {
+    diagFeedback.innerHTML = `
+      <b style="color: #68BB59; display: block; margin-bottom: 4px;">Alignment: True Love</b>
+      This dynamic functions as an active choice oriented to another's flourishment, holding separate boundaries. It is consistent, differentiation-safe, and healthy.
+    `;
+  } else {
+    let aspects = [];
+    if (!isVerb) aspects.push("conflating feelings (cathexis) with action");
+    if (!isThem) aspects.push("extracting emotional stabilization for yourself");
+    if (!isTwo) aspects.push("enmeshment demanding sameness");
+    
+    diagFeedback.innerHTML = `
+      <b style="color: var(--orange); display: block; margin-bottom: 4px;">Alignment: Counterfeit Loop</b>
+      This dynamic contains extraction markers: ${aspects.join(", ")}. It is highly likely to generate exhaustion, resentment, or control.
+    `;
+  }
+}
+
+document.querySelectorAll(".diag-q").forEach(qNode => {
+  const qIdx = parseInt(qNode.dataset.q);
+  qNode.querySelectorAll(".diag-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      qNode.querySelectorAll(".diag-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      diagState[qIdx] = btn.dataset.val;
+      updateDiagnosticFeedback();
+    });
+  });
+});
+
+// INITIALIZE ON LOAD
+renderFeelings();
+renderActsAccordion();
+renderLoopStep(0);
+renderMatrix();
+</script>
+</body>
+</html>
